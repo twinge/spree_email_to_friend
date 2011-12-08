@@ -14,6 +14,7 @@ class ToFriendMailer < ActionMailer::Base
       opts[:to] = mail.recipient_email
     end
     opts[:subject] =  mail.subject
+    opts[:from] =  mail.sender_email
     opts[:reply_to] = mail.sender_email
 
     mail(opts)
