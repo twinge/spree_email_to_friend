@@ -1,16 +1,10 @@
-# Spree namespacing requires moving this file into the spree folder.
-# also current spree_email_to_friend gem implements the same
-# namespace file structure.
-# 
-# https://github.com/spree/spree_email_to_friend/blob/914f88e95fc08965bef4d97b44079f0e56f40eca/app/controllers/spree/email_sender_controller.rb
-
 module Spree
   class EmailSenderController < Spree::BaseController
     before_filter :find_object
 
     def send_mail
       if request.get?
-        @mail_to_friend = MailToFriend.new(:sender_email => current_user.try(:email))
+        @mail_to_friend = Spree::MailToFriend.new(:sender_email => current_user.try(:email))
       else
         mail_to_friend
       end
@@ -42,11 +36,10 @@ module Spree
 
     #extract send message to make easier to override
     def send_message(object, mail_to_friend)
-      ToFriendMailer.deliver_mail_to_friend(object,mail_to_friend)
+      Spree::ToFriendMailer.mail_to_friend(object, mail_to_friend)
     end
 
     def find_object
-      # in light of spree namepacing
       class_name = "Spree::#{(params[:type].titleize)}".constantize
       return false if params[:id].blank?
       @object = class_name.find_by_id(params[:id])
