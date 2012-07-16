@@ -36,7 +36,7 @@ module Spree
 
     #extract send message to make easier to override
     def send_message(object, mail_to_friend)
-      Spree::ToFriendMailer.mail_to_friend(object, mail_to_friend)
+      Spree::ToFriendMailer.mail_to_friend(object, mail_to_friend).deliver
     end
 
     def find_object
