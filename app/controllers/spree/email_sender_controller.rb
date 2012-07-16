@@ -19,7 +19,8 @@ module Spree
           captcha_passed = !Spree::Captcha::Config[:use_captcha] || verify_recaptcha(:private_key => Spree::Captcha::Config[:private_key])
           if @mail_to_friend.valid? && captcha_passed
             flash[:notice] = I18n.t('email_to_friend.mail_sent_to', :email => @mail_to_friend.recipient_email).html_safe
-            flash[:notice] << ActionController::Base.helpers.link_to(I18n.t('email_to_friend.send_to_other'), email_to_friend_path(@object.class.name.downcase, @object)).html_safe
+            # raise @object.inspect
+            flash[:notice] << ActionController::Base.helpers.link_to(I18n.t('email_to_friend.send_to_other'), email_to_friend_path(@object.class.to_s.downcase.demodulize, @object.id)).html_safe
 
             send_message(@object, @mail_to_friend)
 
